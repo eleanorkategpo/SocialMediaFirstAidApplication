@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "474002192317",
+    "firebase_url": "https://socialmediafirstaidapp.firebaseio.com",
+    "project_id": "socialmediafirstaidapp",
+    "storage_bucket": "socialmediafirstaidapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474002192317:android:cf2a40b21cb86e2b",
+        "android_client_info": {
+          "package_name": "com.example.socialmediafirstaidapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "474002192317-bj9a97km06553rft6l4nel3fjq5eck6l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socialmediafirstaidapplication",
+            "certificate_hash": "b8787f666cfb229a807ecffe26fdd20071caf280"
+          }
+        },
+        {
+          "client_id": "474002192317-hbl5re304hdul50fgvahhjo40odgekpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT6WKrtqeAtd7jBdErHOI1emmotKJgOGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "474002192317-hbl5re304hdul50fgvahhjo40odgekpr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
