@@ -1,30 +1,30 @@
 package com.example.socialmediafirstaidapplication;
 
 public class FirstAidRequest {
-    public String user_id, name, situation, responder_id;
+    public String id, user_id, situation, responder_id;
     public double longitude, latitude;
-    public boolean resolved;
+    public int status;
 
     public FirstAidRequest () {
 
     }
 
-    public FirstAidRequest(String user_id, String name, double longitude, double latitude, String situation, String responder_id, Boolean resolved) {
+    public FirstAidRequest(String id, String user_id, double longitude, double latitude, String situation, String responder_id, int status) {
+        this.id = id;
         this.user_id = user_id;
-        this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
         this.situation = situation;
         this.responder_id = responder_id;
-        this.resolved = resolved;
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUser_id() {
         return user_id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public double getLongitude() {
@@ -43,7 +43,7 @@ public class FirstAidRequest {
         return responder_id;
     }
 
-    public boolean isResolved() {
-        return resolved;
+    public int getStatus() {
+        return status;
     }
 }
