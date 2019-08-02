@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import com.baoyachi.stepview.HorizontalStepView;
-import com.baoyachi.stepview.VerticalStepView;
 import com.baoyachi.stepview.bean.StepBean;
 
 import java.util.ArrayList;
