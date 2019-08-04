@@ -21,25 +21,13 @@ public class RecipientSuccessActivity extends AppCompatActivity {
     private String request_id;
     private TextView statusId;
     private FirebaseAuth firebaseAuth;
+    private StateProgressBar stateProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_success);
         setupUIViews();
-    }
-
-    private void setupUIViews() {
-        progressDialog = new ProgressDialog(this);
-        request_id = getIntent().getStringExtra("REQUEST_ID");
-
-        statusId = (TextView) findViewById(R.id.requestId);
-        statusId.setText("Request ID: "+request_id);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        String[] descriptionData = {"Submitted", "Accepted", "Resolved"};
-        StateProgressBar stateProgressBar = (StateProgressBar) findViewById(R.id.statusStepView);
-        stateProgressBar.setStateDescriptionData(descriptionData);
     }
 
     @Override
@@ -63,7 +51,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 firebaseAuth.signOut();
-                                Toast.makeText(RecipientSuccessActivity.this, "Logged out succesfully...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecipientSuccessActivity.this, "Logged out successfully...", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RecipientSuccessActivity.this, LoginActivity.class));
                                 finish();
                             }
@@ -82,6 +70,27 @@ public class RecipientSuccessActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupUIViews() {
+        progressDialog = new ProgressDialog(this);
+        request_id = getIntent().getStringExtra("REQUEST_ID");
+
+        statusId = (TextView) findViewById(R.id.requestId);
+        statusId.setText("Request ID: " + request_id);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        String[] descriptionData = {"Submitted", "Accepted", "Resolved"};
+        stateProgressBar = (StateProgressBar) findViewById(R.id.statusStepView);
+        stateProgressBar.setStateDescriptionData(descriptionData);
+
+        setState();
+    }
+
+    private void setState() {
+        //set state here
+        //stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
     }
 }
 

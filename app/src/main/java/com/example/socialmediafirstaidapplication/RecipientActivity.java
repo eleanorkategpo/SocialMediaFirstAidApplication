@@ -80,7 +80,7 @@ public class RecipientActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 firebaseAuth.signOut();
-                                Toast.makeText(RecipientActivity.this, "Logged out succesfully...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecipientActivity.this, "Logged out successfully...", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RecipientActivity.this, LoginActivity.class));
                                 finish();
                             }
