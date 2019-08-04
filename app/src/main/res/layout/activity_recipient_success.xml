@@ -10,18 +10,36 @@
         android:id="@+id/statusTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
+        android:gravity="center"
         android:text="Status of Request\nfor First Aid"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-    <com.baoyachi.stepview.HorizontalStepView
+    <TextView
+        android:id="@+id/requestId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/statusTV"
+        android:gravity="center" />
+
+    <com.kofigyan.stateprogressbar.StateProgressBar
         android:id="@+id/statusStepView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/statusTV"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_below="@+id/requestId"
+        android:layout_marginTop="10dp"
+        app:spb_currentStateNumber="one"
+        app:spb_maxStateNumber="three"
+        app:spb_stateBackgroundColor="#BDBDBD"
+        app:spb_stateForegroundColor="#DB0082"
+        app:spb_stateNumberBackgroundColor="#808080"
+        app:spb_stateNumberForegroundColor="#eeeeee"
+        app:spb_currentStateDescriptionColor="#DB0082"
+        app:spb_stateDescriptionColor="#808080"
+        app:spb_animateToCurrentProgressState="true"
+        app:spb_checkStateCompleted="true"/>
 
 </RelativeLayout>

@@ -32,15 +32,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setupUIViews();
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
-
-        /*FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            finish();
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-        }*/
-
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +52,14 @@ public class LoginActivity extends AppCompatActivity {
         Password = (EditText)findViewById(R.id.passwordET);
         Login = (Button)findViewById(R.id.loginBT);
         Register = (TextView)findViewById(R.id.registerTV);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        }
     }
 
     private void validate(String email, String password) {
@@ -77,7 +76,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                         progressDialog.dismiss();
                         Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {

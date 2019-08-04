@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,6 +16,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +37,7 @@ public class RecipientActivity extends AppCompatActivity {
     private EditText Situation;
     private DatabaseReference firstAidRequest;
     private ProgressDialog progressDialog;
+    private FirebaseAuth firebaseAuth;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -45,7 +51,7 @@ public class RecipientActivity extends AppCompatActivity {
         Help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.setMessage("Processing request..");
+                progressDialog.setMessage("Processing request...");
                 progressDialog.show();
 
                 requestLocation();
@@ -53,7 +59,50 @@ public class RecipientActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.viewRequests:
+                startActivity(new Intent(RecipientActivity.this, RecipientRequests.class));
+                return true;
+            case R.id.logoutItem:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Are you sure you want to logout?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                firebaseAuth.signOut();
+                                Toast.makeText(RecipientActivity.this, "Logged out succesfully...", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RecipientActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setupUiViews() {
+        firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         Help = (Button) findViewById(R.id.helpBT);
         Situation = (EditText) findViewById(R.id.situationET);
@@ -90,7 +139,7 @@ public class RecipientActivity extends AppCompatActivity {
         String situation = Situation.getText().toString().trim();
 
         firstAidRequest = FirebaseDatabase.getInstance().getReference("FirstAidRequest");
-        String id = firstAidRequest.push().getKey();
+        final String id = firstAidRequest.push().getKey();
 
         if (longitude != 0 && latitude != 0) {
             FirstAidRequest request = new FirstAidRequest(id, user_id, longitude, latitude, situation, "0", 1);
@@ -99,8 +148,11 @@ public class RecipientActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RecipientActivity.this, RecipientSuccessActivity.class));
                         progressDialog.dismiss();
+
+                        Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
+                        intent.putExtra("REQUEST_ID", id);
+                        startActivity(intent);
                     }
 
                 }
