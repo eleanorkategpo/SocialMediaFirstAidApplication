@@ -10,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="100dp"
         android:text="Recipient"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
     <EditText
         android:id="@+id/situationET"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
