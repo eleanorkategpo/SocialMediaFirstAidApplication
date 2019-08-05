@@ -99,7 +99,6 @@ public class RecipientRequests extends AppCompatActivity {
     }
 
     private void getRequestsByUser() {  //todo add real data
-        //String id, String user_id, double longitude, double latitude, String situation, String responder_id, int status)
-        requestList.add( new FirstAidRequest("id here", "Nepo", 001,002, "help", "0", 1));
+
     }
 }

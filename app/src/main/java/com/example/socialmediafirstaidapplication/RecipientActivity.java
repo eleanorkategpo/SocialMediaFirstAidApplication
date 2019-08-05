@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,8 +30,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class RecipientActivity extends AppCompatActivity {
     private Button Help;
@@ -130,47 +135,66 @@ public class RecipientActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+        firstAidRequest = FirebaseDatabase.getInstance().getReference("FirstAidRequest");
     }
 
-    private void sendHelp(double longitude, double latitude) { //First Aid Request (data): String id, String user_id, double longitude, double latitude, String situation, String responder_id, int status
+    private void sendHelp(final double longitude, final double latitude) { //First Aid Request (data): String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getUid();
-
-        String situation = Situation.getText().toString().trim();
-
-        firstAidRequest = FirebaseDatabase.getInstance().getReference("FirstAidRequest");
+        final String user_id = user.getUid();
+        final String situation = Situation.getText().toString().trim();
         final String id = firstAidRequest.push().getKey();
+        final String user_name[] = new String[1];
 
-        if (longitude != 0 && latitude != 0) {
-            FirstAidRequest request = new FirstAidRequest(id, user_id, longitude, latitude, situation, "0", 1);
-            firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-
-                        Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
-                        intent.putExtra("REQUEST_ID", id);
-                        startActivity(intent);
-                    }
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-                }
-            });
-        }
-        else {
-            Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.",Toast.LENGTH_LONG);
-        }
-        /*//get user name from here;
         Query currentUser = FirebaseDatabase.getInstance().getReference("Users")
                 .orderByChild("user_id")
-                .equalTo(user.getUid());*/
+                .equalTo(user.getUid());
+
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    for (DataSnapshot snapChild : snap.getChildren() ) {
+                        String key = snapChild.getKey();
+                        if (key.equals("name")) {
+                            user_name[0] = String.valueOf(snapChild.getValue());
+
+                            if (longitude != 0 && latitude != 0) {
+                                //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
+                                FirstAidRequest request = new FirstAidRequest(id, user_id, user_name[0], situation, "0", longitude, latitude,  1);
+                                firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
+
+                                            Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
+                                            intent.putExtra("REQUEST_ID", id);
+                                            startActivity(intent);
+                                        }
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                            }
+                            else {
+                                Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.",Toast.LENGTH_LONG);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
