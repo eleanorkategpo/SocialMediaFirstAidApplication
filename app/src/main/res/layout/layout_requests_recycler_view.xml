@@ -15,35 +15,46 @@
             android:padding="8dp">
 
             <TextView
-                android:id="@+id/situationTV"
+                android:id="@+id/requestIdTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="Situation"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="#000000" />
+                android:singleLine="false"
+                android:text="Request Id"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/nameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/situationTV"
-                android:layout_marginLeft="5dp"
+                android:layout_below="@+id/requestIdTV"
                 android:layout_marginTop="5dp"
-                android:text="name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                android:layout_marginLeft="5dp"
+                android:text="Name"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/currentStatusTV"
+                android:id="@+id/situationTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/nameTV"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
+                android:text="Situation"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/currentStatusTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/situationTV"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/colorPrimary"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:text="current status"
+                android:text="Current Status"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
                 android:textStyle="bold" />
 

@@ -24,11 +24,11 @@ public class FirstAidRequest {
         return id;
     }
 
-    public String getUser_id() {
+    public String getUserId() {
         return user_id;
     }
 
-    public String getUser_name() {
+    public String getName() {
         return user_name;
     }
 

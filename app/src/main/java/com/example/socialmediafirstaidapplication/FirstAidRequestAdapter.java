@@ -15,10 +15,13 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
 
     private Context mCtx;
     private List<FirstAidRequest> firstAidRequestList;
+    private OnRequestListener mOnRequestListener;
 
-    public FirstAidRequestAdapter(Context mCtx, List<FirstAidRequest> firstAidRequestList) {
+
+    public FirstAidRequestAdapter(Context mCtx, List<FirstAidRequest> firstAidRequestList, OnRequestListener onRequestListener) {
         this.mCtx = mCtx;
         this.firstAidRequestList = firstAidRequestList;
+        this.mOnRequestListener = onRequestListener;
     }
 
     @NonNull
@@ -26,14 +29,15 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
     public FirstAidRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
         View view = inflater.inflate(R.layout.layout_requests_recycler_view, null);
-        return new FirstAidRequestViewHolder(view);
+        return new FirstAidRequestViewHolder(view, mOnRequestListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FirstAidRequestViewHolder holder, int position) {
         FirstAidRequest request = firstAidRequestList.get(position);
+        holder.requestIdTV.setText("Request ID: " + request.getId());
         holder.situationTV.setText(request.getSituation());
-       holder.nameTV.setText(/*request.getName()*/ "Temporary Name") ;
+        holder.nameTV.setText(request.getName()) ;
         holder.currentStatusTV.setText(request.getStatus() == 1 ?  "Submitted" : (request.getStatus() == 2 ? "Accepted" : "Resolved") );
         holder.addressTV.setText(request.getLongitude() + " " + request.getLatitude());
     }
@@ -43,17 +47,31 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
         return firstAidRequestList.size();
     }
 
-    class FirstAidRequestViewHolder extends RecyclerView.ViewHolder {
+    class FirstAidRequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView situationTV, nameTV, currentStatusTV, addressTV;
+        TextView situationTV, nameTV, currentStatusTV, addressTV, requestIdTV;
+        OnRequestListener onRequestListener;
 
-        public FirstAidRequestViewHolder(@NonNull View itemView) {
+        public FirstAidRequestViewHolder(@NonNull View itemView, OnRequestListener onRequestListener) {
             super(itemView);
 
+            requestIdTV = itemView.findViewById(R.id.requestIdTV);
             situationTV = itemView.findViewById(R.id.situationTV);
             nameTV = itemView.findViewById(R.id.nameTV);
             currentStatusTV = itemView.findViewById(R.id.currentStatusTV);
             addressTV = itemView.findViewById(R.id.addressTV);
+            this.onRequestListener = onRequestListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onRequestListener.onRequestClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnRequestListener {
+        void onRequestClick(int position);
     }
 }
