@@ -10,6 +10,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +27,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +44,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class RecipientActivity extends AppCompatActivity {
     private Button Help;
     private EditText Situation;
@@ -46,6 +60,8 @@ public class RecipientActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private LocationListener locationListener;
+
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,15 +151,17 @@ public class RecipientActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         };
+
         firstAidRequest = FirebaseDatabase.getInstance().getReference("FirstAidRequest");
+
+        requestQueue = Volley.newRequestQueue(this);
     }
 
-    private void sendHelp(final double longitude, final double latitude) { //First Aid Request (data): String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
+    private void sendHelp(final double longitude, final double latitude, final String formattedAddress) { //First Aid Request (data): String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String user_id = user.getUid();
         final String situation = Situation.getText().toString().trim();
         final String id = firstAidRequest.push().getKey();
-        final String user_name[] = new String[1];
 
         Query currentUser = FirebaseDatabase.getInstance().getReference("Users")
                 .orderByChild("user_id")
@@ -153,39 +171,35 @@ public class RecipientActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    for (DataSnapshot snapChild : snap.getChildren() ) {
-                        String key = snapChild.getKey();
-                        if (key.equals("name")) {
-                            user_name[0] = String.valueOf(snapChild.getValue());
+                    User user = snap.getValue(User.class);
+                    String user_name = user.getName();
 
-                            if (longitude != 0 && latitude != 0) {
-                                //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
-                                FirstAidRequest request = new FirstAidRequest(id, user_id, user_name[0], situation, "0", longitude, latitude,  1);
-                                firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
-                                            progressDialog.dismiss();
+                    if (longitude != 0 && latitude != 0) {
+                        //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
+                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, 1);
+                        firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
 
-                                            Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
-                                            intent.putExtra("REQUEST_ID", id);
-                                            startActivity(intent);
-                                        }
+                                    Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
+                                    intent.putExtra("REQUEST_ID", id);
+                                    startActivity(intent);
+                                }
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                        progressDialog.dismiss();
-                                    }
-                                });
                             }
-                            else {
-                                Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.",Toast.LENGTH_LONG);
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
-                        }
+                        });
+                    }
+                    else {
+                        Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.",Toast.LENGTH_LONG);
                     }
                 }
             }
@@ -226,13 +240,27 @@ public class RecipientActivity extends AppCompatActivity {
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                 if (location != null && locationListener != null) {
-                    //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    sendHelp(location.getLongitude(), location.getLatitude());
+                    String formattedAddress = getFormattedAddress(location.getLongitude(), location.getLatitude());
+
+                    sendHelp(location.getLongitude(), location.getLatitude(), formattedAddress);
                 }
                 else {
                     Toast.makeText(RecipientActivity.this, "Something went wrong while getting location. Check your GPS and try again.", Toast.LENGTH_LONG);
                 }
             }
         }
+    }
+
+    private String getFormattedAddress(double longitude, double latitude){
+        String address = "";
+        Geocoder geocoder = new Geocoder(RecipientActivity.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            address = addresses.get(0).getAddressLine(0);
+           // myCity = addresses.get(0).getLocality();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 }

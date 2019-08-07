@@ -31,14 +31,32 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:text="Name"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="#000000" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/addressTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameTV"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="View Address"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <View
+
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/addressTV"/>
 
             <TextView
                 android:id="@+id/situationTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nameTV"
+                android:layout_below="@id/line"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:text="Situation"
@@ -56,17 +74,6 @@
                 android:paddingRight="15dp"
                 android:text="Current Status"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/addressTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/currentStatusTV"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:text="View Address"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="bold" />
 
         </RelativeLayout>
