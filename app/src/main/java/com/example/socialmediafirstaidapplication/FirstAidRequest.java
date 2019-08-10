@@ -1,7 +1,7 @@
 package com.example.socialmediafirstaidapplication;
 
 public class FirstAidRequest {
-    public String id, user_id, user_name, situation, responder_id, formattedAddress;
+    public String id, user_id, user_name, situation, responder_id, formattedAddress, phoneNumber;
     public double longitude, latitude;
     public int status;
 
@@ -9,7 +9,7 @@ public class FirstAidRequest {
 
     }
 
-    public FirstAidRequest(String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, String formattedAddress, int status) {
+    public FirstAidRequest(String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, String formattedAddress, String phoneNumber, int status) {
         this.id = id;
         this.user_id = user_id;
         this.user_name = user_name;
@@ -18,6 +18,7 @@ public class FirstAidRequest {
         this.longitude = longitude;
         this.latitude = latitude;
         this.formattedAddress = formattedAddress;
+        this.phoneNumber = phoneNumber;
         this.status = status;
     }
 
@@ -55,5 +56,9 @@ public class FirstAidRequest {
 
     public String getFormattedAddress() {
         return formattedAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

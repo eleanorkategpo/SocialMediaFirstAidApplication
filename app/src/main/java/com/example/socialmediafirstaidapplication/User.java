@@ -2,14 +2,14 @@ package com.example.socialmediafirstaidapplication;
 
 
 public class User {
-    public String id, user_id, name, email, gender, birthday;
+    public String id, user_id, name, email, gender, birthday, phone_number;
     public boolean isResponder;
 
     public User() {
 
     }
 
-    public User (String id, String user_id, String name, String email, String gender, String birthday, boolean isResponder) {
+    public User (String id, String user_id, String name, String email, String gender, String birthday, boolean isResponder, String phone_number) {
         this.id = id;
         this.user_id = user_id;
         this.name = name;
@@ -17,6 +17,7 @@ public class User {
         this.gender = gender;
         this.birthday = birthday;
         this.isResponder = isResponder;
+        this.phone_number = phone_number;
     }
 
     public String getId() {
@@ -47,4 +48,7 @@ public class User {
         return birthday;
     }
 
+    public String getPhoneNumber() {
+        return phone_number;
+    }
 }

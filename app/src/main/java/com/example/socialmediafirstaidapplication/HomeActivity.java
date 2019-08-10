@@ -15,13 +15,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
     private Button Recipient;
     private Button Responder;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +48,12 @@ public class HomeActivity extends AppCompatActivity {
         Responder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomeActivity.this, ResponderActivity.class));
+                if (isResponder()) {
+                    startActivity(new Intent(HomeActivity.this, ResponderActivity.class));
+                }
+                else {
+                    Toast.makeText(HomeActivity.this, "You cannot access this page.", Toast.LENGTH_SHORT);
+                }
             }
         });
     }
@@ -91,5 +106,31 @@ public class HomeActivity extends AppCompatActivity {
         Responder = (Button)findViewById(R.id.responderBT);
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private boolean isResponder() {
+        /*final boolean[] isResponder = {true};
+
+        String user_id = user.getUid();
+        Query currentUser = FirebaseDatabase.getInstance().getReference("Users")
+                .orderByChild("user_id")
+                .equalTo(user_id);
+
+        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    User user = snap.getValue(User.class);
+                    isResponder[0] = user.isResponder();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
+        return true;
     }
 }

@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText Name, Birthday, Email, Password;
+    private EditText Name, Birthday, Email, Password, PhoneNumber;
     private RadioButton Female, Male;
     private Button Register;
     private TextView Signin;
@@ -109,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         Register = (Button)findViewById(R.id.loginBT);
         Signin = (TextView)findViewById(R.id.siginTV);
         Responder = (CheckBox)findViewById(R.id.isResponderCB);
+        PhoneNumber = (EditText)findViewById(R.id.addressET);
 
         Birthday.setShowSoftInputOnFocus(false);
     }
@@ -119,8 +120,9 @@ public class RegisterActivity extends AppCompatActivity {
         String email = Email.getText().toString();
         String password = Password.getText().toString();
         String email_regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        String phone_number = PhoneNumber.getText().toString();
 
-        if (email.isEmpty() || password.isEmpty() || (!Female.isChecked() && !Male.isChecked()) || birthday.isEmpty() || name.isEmpty() ) {
+        if (email.isEmpty() || password.isEmpty() || (!Female.isChecked() && !Male.isChecked()) || birthday.isEmpty() || name.isEmpty() || phone_number.isEmpty() ) {
             Toast.makeText(this, "Please input all the details.", Toast.LENGTH_SHORT);
         }
         else if (password.length() < 6) {
@@ -141,12 +143,13 @@ public class RegisterActivity extends AppCompatActivity {
         String email = Email.getText().toString().trim();
         String gender = (Female.isChecked()) ? "Female" : "Male";
         String birthday = Birthday.getText().toString().trim();
+        String phone_number = PhoneNumber.getText().toString();
         boolean isResponder = Responder.isChecked();
 
         userTable = FirebaseDatabase.getInstance().getReference("Users");
         String id = userTable.push().getKey();
 
-        User user = new User(id, user_id, name, email, gender, birthday, isResponder);
+        User user = new User(id, user_id, name, email, gender, birthday, isResponder, phone_number);
 
         userTable.child(id).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -75,7 +75,13 @@ public class RecipientActivity extends AppCompatActivity {
                 progressDialog.setMessage("Processing request...");
                 progressDialog.show();
 
-                requestLocation();
+                String currentSituation = Situation.getText().toString();
+                if (currentSituation.isEmpty()){
+                    Toast.makeText(RecipientActivity.this, "Kindly explain the situation.", Toast.LENGTH_SHORT);
+                }
+                else {
+                    requestLocation();
+                }
             }
         });
     }
@@ -173,26 +179,27 @@ public class RecipientActivity extends AppCompatActivity {
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     User user = snap.getValue(User.class);
                     String user_name = user.getName();
+                    String phoneNumber = user.getPhoneNumber();
 
                     if (longitude != 0 && latitude != 0) {
                         //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
-                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, 1);
-                        firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
+                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, phoneNumber, 1);
+                                firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
 
-                                    Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
-                                    intent.putExtra("REQUEST_ID", id);
-                                    startActivity(intent);
-                                }
+                                            Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
+                                            intent.putExtra("REQUEST_ID", id);
+                                            startActivity(intent);
+                                        }
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }

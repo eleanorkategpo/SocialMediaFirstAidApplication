@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecipientRequests"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key"/>
+        <activity android:name=".ResponderRequestActivity"></activity>
+        <activity android:name=".RecipientRequests" />
         <activity android:name=".RecipientActivity" />
         <activity android:name=".RecipientSuccessActivity" />
         <activity android:name=".ResponderActivity" />

@@ -12,13 +12,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +29,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
     private String request_id;
     private TextView statusId;
     private Button resolve;
-    private ImageView refresh;
+    private FloatingActionButton fab;
     private FirebaseAuth firebaseAuth;
     private StateProgressBar stateProgressBar;
     private DatabaseReference firstAidRequest;
@@ -44,19 +40,19 @@ public class RecipientSuccessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipient_success);
         setupUIViews();
 
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setState();
-            }
-        });
-
         resolve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firstAidRequest.child(request_id).child("status").setValue((resolve.getText() == "Mark as Resolved") ? 3 : 2);
                 setState();
                 Toast.makeText(RecipientSuccessActivity.this, "Status of request has been updated...", Toast.LENGTH_SHORT);
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setState();
             }
         });
     }
@@ -104,10 +100,10 @@ public class RecipientSuccessActivity extends AppCompatActivity {
     }
 
     private void setupUIViews() {
-        refresh = (ImageView) findViewById(R.id.refreshBtn);
         resolve = (Button) findViewById(R.id.resolvedBtn);
-
+        fab = (FloatingActionButton) findViewById(R.id.floating_action_button);
         progressDialog = new ProgressDialog(this);
+
         request_id = getIntent().getStringExtra("REQUEST_ID");
 
         statusId = (TextView) findViewById(R.id.requestId);

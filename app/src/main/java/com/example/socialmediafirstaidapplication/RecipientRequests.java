@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +34,7 @@ public class RecipientRequests extends AppCompatActivity implements FirstAidRequ
     private List<FirstAidRequest> requestList;
     private String user_id;
     private ProgressDialog progressDialog;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,13 @@ public class RecipientRequests extends AppCompatActivity implements FirstAidRequ
         setContentView(R.layout.activity_recipient_requests);
         setupUIViews();
         getRequestsByUser();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRequestsByUser();
+            }
+        });
     }
 
     @Override
@@ -93,11 +103,12 @@ public class RecipientRequests extends AppCompatActivity implements FirstAidRequ
         recyclerView = (RecyclerView)findViewById(R.id.requestsRV);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         requestAdapter = new FirstAidRequestAdapter(this, requestList, this );
         recyclerView.setAdapter(requestAdapter);
 
         progressDialog = new ProgressDialog(this);
+
+        fab = (FloatingActionButton) findViewById(R.id.floating_action_button);
     }
 
     private void getRequestsByUser() {  //todo add real data

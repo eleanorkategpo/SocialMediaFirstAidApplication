@@ -1,7 +1,6 @@
 package com.example.socialmediafirstaidapplication;
 
 import android.content.Context;
-import android.location.Geocoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,8 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
     public void onBindViewHolder(@NonNull FirstAidRequestViewHolder holder, int position) {
         FirstAidRequest request = firstAidRequestList.get(position);
         holder.requestIdTV.setText("Request ID: " + request.getId());
-        holder.situationTV.setText(request.getSituation());
-        holder.nameTV.setText("Name: " + request.getName()) ;
+        holder.situationTV.setText(((request.getSituation()).isEmpty()) ? "Situation not explained" : request.getSituation() );
+        holder.nameTV.setText("Name: " + request.getName());
         holder.currentStatusTV.setText(request.getStatus() == 1 ?  "Submitted" : (request.getStatus() == 2 ? "Accepted" : "Resolved") );
         holder.addressTV.setText("Address: " + request.getFormattedAddress());
     }

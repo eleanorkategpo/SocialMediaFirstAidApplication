@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Social Media First Aid Application</string>
+    <string name="google_maps_key">AIzaSyDYScD2_2stBNPvIXkxddrn-OrIxIUmdwk</string>
 </resources>

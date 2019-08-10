@@ -85,13 +85,35 @@
         android:layout_below="@+id/emailET"
         android:layout_centerHorizontal="true"/>
 
+    <EditText
+        android:id="@+id/addressET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:hint="Address"
+        android:inputType="textPostalAddress"
+        android:layout_below="@+id/passwordET"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/phoneNumberEt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="text|phone"
+        android:layout_below="@+id/addressET"
+        android:layout_centerHorizontal="true"/>
+
     <CheckBox
         android:id="@+id/isResponderCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="Register as Responder"
-        android:layout_below="@+id/passwordET"
+        android:layout_below="@+id/phoneNumberEt"
         android:layout_centerHorizontal="true"/>
 
     <TextView
