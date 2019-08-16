@@ -33,9 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -98,6 +95,7 @@ public class ResponderRequestActivity extends AppCompatActivity implements OnMap
     private void setupUIViews() {
         request_id = getIntent().getStringExtra("REQUEST_ID");
 
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -182,7 +180,6 @@ public class ResponderRequestActivity extends AppCompatActivity implements OnMap
                     if (newStatus == 2){
                         firstAidRequest.setResponderId(firebaseUser.getUid()); //set to responder
                         firstAidRequest.setDateAccepted( dateFormat.format(new Date())); //set date accepted
-                        setupButtons();
                         toastMsg = "You have accepted the request. The recipient will be expecting you.";
                     }
                     else {
@@ -192,7 +189,7 @@ public class ResponderRequestActivity extends AppCompatActivity implements OnMap
                     DatabaseReference dR = FirebaseDatabase.getInstance().getReference("FirstAidRequest").child(request_id);
                     dR.setValue(firstAidRequest);
 
-
+                    setupButtons();
                     Toast.makeText(ResponderRequestActivity.this, toastMsg, Toast.LENGTH_SHORT);
                     progressDialog.dismiss();
                 }
