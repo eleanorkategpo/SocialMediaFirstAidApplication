@@ -3,68 +3,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ResponderRequestActivity">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
+    android:layout_height="300dp"
     android:id="@+id/mapView"
     tools:context=".MapsActivity"
     android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <LinearLayout
+    <ScrollView
         android:id="@+id/buttons"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
         android:layout_below="@id/mapView">
 
-        <Button
-            android:id="@+id/acceptBT"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Accept"/>
+            android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/declineBT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Decline"/>
-    </LinearLayout>
+            <Button
+                android:id="@+id/acceptBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Accept"/>
 
-    <androidx.cardview.widget.CardView
+            <Button
+                android:id="@+id/declineBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Decline"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/accepted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/buttons">
+        android:visibility="invisible"
+        android:layout_below="@id/mapView"
+        android:layout_margin="10dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/currentStatusTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_centerHorizontal="true"
+                android:text="Current Status"/>
+            <TextView
+                android:id="@+id/message1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/currentStatusTV"
+                android:text="You accepted this request."/>
+            <TextView
+                android:id="@+id/message2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/message1"
+                android:text="The recipient will be expecting you."/>
+
+            <Button
+                android:id="@+id/revertResolveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/message2"
+                android:text="Mark as resolved"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accepted">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-            <LinearLayout
+            <TextView
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Details for First Aid Request"/>
-
-                <TextView
-                    android:id="@+id/requestIdTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:textSize="10dp"
-                    android:text="sample id"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:text="Details for First Aid Request"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
                 android:id="@+id/situationTV"
@@ -74,20 +114,32 @@
                 android:text="Situation"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/situationTV"
+                android:layout_marginBottom="10dp"
+                android:text="Date"
+                android:textStyle="italic"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
             <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorDivider"
-                android:layout_below="@+id/situationTV"/>
+                android:layout_below="@+id/date"/>
 
             <TextView
                 android:id="@+id/details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recipient Details:"
+                android:layout_below="@+id/line"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/line"/>
+                android:text="Recipient Details:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
                 android:id="@+id/nameTV"
@@ -104,19 +156,25 @@
                 android:text="address"/>
 
             <TextView
-                android:id="@+id/altAddressTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/addressTV"
-                android:text="Alternative Address"/>
-
-            <TextView
                 android:id="@+id/phoneNumberTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/altAddressTV"
+                android:layout_below="@id/addressTV"
                 android:text="phonenumber"/>
-
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/ic_refresh" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

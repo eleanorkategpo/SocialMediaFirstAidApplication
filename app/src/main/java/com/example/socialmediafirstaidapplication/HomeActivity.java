@@ -48,12 +48,36 @@ public class HomeActivity extends AppCompatActivity {
         Responder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isResponder()) {
-                    startActivity(new Intent(HomeActivity.this, ResponderActivity.class));
-                }
-                else {
-                    Toast.makeText(HomeActivity.this, "You cannot access this page.", Toast.LENGTH_SHORT);
-                }
+                progressDialog.setMessage("Checking your credibility...");
+                progressDialog.show();
+
+                Query currentUser = FirebaseDatabase.getInstance().getReference("Users")
+                        .orderByChild("user_id")
+                        .equalTo(user.getUid());
+
+                currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                            User user = snap.getValue(User.class);
+                            if (user.isResponder()) {
+                                Intent intent = new Intent(HomeActivity.this, ResponderActivity.class);
+                                intent.putExtra("VIEW_MY_RESPONSES", "false");
+                                startActivity(intent);
+                                progressDialog.dismiss();
+                            }
+                            else {
+                                Toast.makeText(HomeActivity.this, "You cannot access this page.", Toast.LENGTH_LONG);
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
     }
@@ -68,10 +92,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.viewRequests:
+           /* case R.id.viewRequests:
                 Intent intent = new Intent(HomeActivity.this, RecipientRequests.class);
                 startActivity(intent);
-                return true;
+                return true;*/
             case R.id.logoutItem:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Are you sure you want to logout?")
@@ -107,30 +131,5 @@ public class HomeActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    private boolean isResponder() {
-        /*final boolean[] isResponder = {true};
-
-        String user_id = user.getUid();
-        Query currentUser = FirebaseDatabase.getInstance().getReference("Users")
-                .orderByChild("user_id")
-                .equalTo(user_id);
-
-        currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    User user = snap.getValue(User.class);
-                    isResponder[0] = user.isResponder();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-        return true;
     }
 }

@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         Register = (Button)findViewById(R.id.loginBT);
         Signin = (TextView)findViewById(R.id.siginTV);
         Responder = (CheckBox)findViewById(R.id.isResponderCB);
-        PhoneNumber = (EditText)findViewById(R.id.addressET);
+        PhoneNumber = (EditText)findViewById(R.id.phoneNumberEt);
 
         Birthday.setShowSoftInputOnFocus(false);
     }

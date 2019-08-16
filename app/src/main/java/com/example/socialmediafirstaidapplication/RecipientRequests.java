@@ -54,13 +54,16 @@ public class RecipientRequests extends AppCompatActivity implements FirstAidRequ
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu_recipient,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.backHome:
+                startActivity(new Intent(RecipientRequests.this, HomeActivity.class));
+                return true;
             case R.id.viewRequests:
                 startActivity(new Intent(RecipientRequests.this, RecipientRequests.class));
                 return true;

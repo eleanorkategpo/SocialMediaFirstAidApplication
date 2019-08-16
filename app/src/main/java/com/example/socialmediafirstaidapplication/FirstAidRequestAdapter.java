@@ -34,6 +34,7 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
     @Override
     public void onBindViewHolder(@NonNull FirstAidRequestViewHolder holder, int position) {
         FirstAidRequest request = firstAidRequestList.get(position);
+        holder.dateTV.setText(request.getDateRequested());
         holder.requestIdTV.setText("Request ID: " + request.getId());
         holder.situationTV.setText(((request.getSituation()).isEmpty()) ? "Situation not explained" : request.getSituation() );
         holder.nameTV.setText("Name: " + request.getName());
@@ -48,12 +49,13 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
 
     class FirstAidRequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView situationTV, nameTV, currentStatusTV, addressTV, requestIdTV;
+        TextView situationTV, nameTV, currentStatusTV, addressTV, requestIdTV, dateTV;
         OnRequestListener onRequestListener;
 
         public FirstAidRequestViewHolder(@NonNull View itemView, OnRequestListener onRequestListener) {
             super(itemView);
 
+            dateTV = itemView.findViewById(R.id.date);
             requestIdTV = itemView.findViewById(R.id.requestIdTV);
             situationTV = itemView.findViewById(R.id.situationTV);
             nameTV = itemView.findViewById(R.id.nameTV);

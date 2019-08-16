@@ -86,17 +86,6 @@
         android:layout_centerHorizontal="true"/>
 
     <EditText
-        android:id="@+id/addressET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:hint="Address"
-        android:inputType="textPostalAddress"
-        android:layout_below="@+id/passwordET"
-        android:layout_centerHorizontal="true"/>
-
-    <EditText
         android:id="@+id/phoneNumberEt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,7 +93,7 @@
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="text|phone"
-        android:layout_below="@+id/addressET"
+        android:layout_below="@+id/passwordET"
         android:layout_centerHorizontal="true"/>
 
     <CheckBox

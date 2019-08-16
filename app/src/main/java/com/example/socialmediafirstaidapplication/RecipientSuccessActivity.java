@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,15 +25,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
+import java.util.Date;
+
+
 public class RecipientSuccessActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String request_id;
-    private TextView statusId;
+    private TextView statusId, responderPhone, responderName, dateAccepted;
     private Button resolve;
     private FloatingActionButton fab;
     private FirebaseAuth firebaseAuth;
     private StateProgressBar stateProgressBar;
     private DatabaseReference firstAidRequest;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +65,16 @@ public class RecipientSuccessActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu_recipient,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.backHome:
+                startActivity(new Intent(RecipientSuccessActivity.this, HomeActivity.class));
+                return true;
             case R.id.viewRequests:
                 startActivity(new Intent(RecipientSuccessActivity.this, RecipientRequests.class));
                 return true;
@@ -104,10 +112,16 @@ public class RecipientSuccessActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.floating_action_button);
         progressDialog = new ProgressDialog(this);
 
+        scrollView = (ScrollView) findViewById(R.id.acceptedMessage);
+
         request_id = getIntent().getStringExtra("REQUEST_ID");
 
         statusId = (TextView) findViewById(R.id.requestId);
         statusId.setText("Request ID: " + request_id);
+
+        dateAccepted = (TextView) findViewById(R.id.dateAccepted);
+        responderName = (TextView) findViewById(R.id.responderName);
+        responderPhone = (TextView) findViewById(R.id.responderPhone);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firstAidRequest = FirebaseDatabase.getInstance().getReference("FirstAidRequest");
@@ -137,12 +151,17 @@ public class RecipientSuccessActivity extends AppCompatActivity {
                     }
                     else if (status == 2) {
                         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+                        getResponderDetails();
                         resolve.setText("Mark as Resolved");
+                        resolveRevert(3);
+
                         resolve.setVisibility(View.VISIBLE);
                     }
                     else {
                         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
+                        getResponderDetails();
                         resolve.setText("Revert to Previous Status");
+                        resolveRevert(2);
 
                         resolve.setVisibility(View.VISIBLE);
                     }
@@ -151,6 +170,101 @@ public class RecipientSuccessActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getResponderDetails (){
+        progressDialog.setMessage("Your data is loading. Please wait...");
+        progressDialog.show();
+
+        Query query = FirebaseDatabase.getInstance().getReference("FirstAidRequest")
+                .orderByChild("id")
+                .limitToFirst(1)
+                .equalTo(request_id);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot  snapshot : dataSnapshot.getChildren()) {
+                        FirstAidRequest firstAidRequest = snapshot.getValue(FirstAidRequest.class);
+                        final String responderId = firstAidRequest.getResponder_id();
+                        dateAccepted.setText(firstAidRequest.getDateAccepted());
+                        getResponderInfo(responderId);
+                    }
+                }
+                else {
+                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getResponderInfo(String responderId) {
+        Query userQuery = FirebaseDatabase.getInstance().getReference("Users")
+                .orderByChild("user_id")
+                .limitToFirst(1)
+                .equalTo(responderId);
+
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        User user = userSnapshot.getValue(User.class);
+                        responderName.setText(user.getName());
+                        responderPhone.setText("Contact Number: " + user.getPhoneNumber());
+
+                        //done
+                        scrollView.setVisibility(View.VISIBLE);
+                        progressDialog.dismiss();
+                    }
+                }
+                else {
+                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void resolveRevert(final int newStatus) {
+
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+
+        Query request = firstAidRequest.orderByChild("id").limitToFirst(1).equalTo(request_id);
+        request.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+
+                    FirstAidRequest firstAidRequest = snap.getValue(FirstAidRequest.class);
+                    firstAidRequest.setStatus(newStatus); //set to accepted
+
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference("FirstAidRequest").child(request_id);
+                    dR.setValue(firstAidRequest);
+
+                    Toast.makeText(RecipientSuccessActivity.this, "Status changed successfully.", Toast.LENGTH_SHORT);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

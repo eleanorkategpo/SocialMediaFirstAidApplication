@@ -18,19 +18,16 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,10 +41,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -89,13 +86,16 @@ public class RecipientActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu_recipient,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.backHome:
+                startActivity(new Intent(RecipientActivity.this, HomeActivity.class));
+                return true;
             case R.id.viewRequests:
                 startActivity(new Intent(RecipientActivity.this, RecipientRequests.class));
                 return true;
@@ -182,8 +182,11 @@ public class RecipientActivity extends AppCompatActivity {
                     String phoneNumber = user.getPhoneNumber();
 
                     if (longitude != 0 && latitude != 0) {
-                        //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude, int status
-                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, phoneNumber, 1);
+                        //String id, String user_id, String user_name, String situation, String responder_id, double longitude, double latitude,
+                        // String formattedAddress, Sting phoneNumber, String dateRequested, int status
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, phoneNumber, dateFormat.format(new Date()),null,  1);
                                 firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
