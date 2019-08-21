@@ -50,7 +50,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
             public void onClick(View view) {
                 firstAidRequest.child(request_id).child("status").setValue((resolve.getText() == "Mark as Resolved") ? 3 : 2);
                 setState();
-                Toast.makeText(RecipientSuccessActivity.this, "Status of request has been updated...", Toast.LENGTH_SHORT);
+                Toast.makeText(RecipientSuccessActivity.this, "Status of request has been updated...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,7 +196,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT);
+                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }
@@ -229,7 +229,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT);
+                    Toast.makeText(RecipientSuccessActivity.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }
@@ -258,7 +258,7 @@ public class RecipientSuccessActivity extends AppCompatActivity {
                     DatabaseReference dR = FirebaseDatabase.getInstance().getReference("FirstAidRequest").child(request_id);
                     dR.setValue(firstAidRequest);
 
-                    Toast.makeText(RecipientSuccessActivity.this, "Status changed successfully.", Toast.LENGTH_SHORT);
+                    Toast.makeText(RecipientSuccessActivity.this, "Status changed successfully.", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }

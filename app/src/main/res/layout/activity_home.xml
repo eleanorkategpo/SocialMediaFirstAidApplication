@@ -4,8 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="150dp"
+    android:paddingTop="200dp"
+    android:background="@drawable/paper_plane_bg"
+
     android:gravity="center_horizontal"
+
     tools:context=".HomeActivity">
 
     <Button

@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="100dp"
+    android:background="@drawable/paper_plane_bg"
     tools:context=".RecipientSuccessActivity">
 
     <TextView
         android:id="@+id/statusTV"
-        android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textAlignment="center"
         android:text="Status of Request\nfor First Aid"
+        android:background="#fff"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView

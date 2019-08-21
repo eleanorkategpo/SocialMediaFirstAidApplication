@@ -123,19 +123,20 @@ public class RegisterActivity extends AppCompatActivity {
         String phone_number = PhoneNumber.getText().toString();
 
         if (email.isEmpty() || password.isEmpty() || (!Female.isChecked() && !Male.isChecked()) || birthday.isEmpty() || name.isEmpty() || phone_number.isEmpty() ) {
-            Toast.makeText(this, "Please input all the details.", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Please input all the details.", Toast.LENGTH_SHORT).show();
         }
         else if (password.length() < 6) {
-            Toast.makeText(this, "Password should have 6 or more characters.", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Password should have 6 or more characters.", Toast.LENGTH_SHORT).show();
         }
         else if (!email.matches(email_regex)) {
-            Toast.makeText(this, "Email address is not valid.", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Email address is not valid.", Toast.LENGTH_SHORT).show();
         }
         //check date validity else if ()
         else {
             return true;
         }
-        return true;
+
+        return false;
     }
 
     private void createUser(String user_id){

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/paper_plane_bg"
+    android:orientation="vertical"
+    android:gravity="center_horizontal|center_vertical"
     tools:context=".LoginActivity">
 
     <TextView
@@ -11,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
         android:text="Member Login"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -24,8 +27,7 @@
         android:layout_below="@+id/textView3"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textPersonName"
-         />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/passwordET"
@@ -36,8 +38,7 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:layout_below="@id/emailET"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/loginBT"
@@ -46,7 +47,7 @@
         android:layout_marginTop="20dp"
         android:text="Login"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/passwordET"/>
+        android:layout_below="@+id/passwordET" />
 
     <TextView
         android:id="@+id/registerTV"
@@ -57,8 +58,5 @@
         android:clickable="true"
         android:gravity="center"
         android:text="Not a member?\nCreate an Account"
-        android:layout_below="@id/loginBT"/>
-
-
-
-</RelativeLayout>
+        android:layout_below="@id/loginBT" />
+</LinearLayout>

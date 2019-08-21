@@ -190,7 +190,7 @@ public class ResponderRequestActivity extends AppCompatActivity implements OnMap
                     dR.setValue(firstAidRequest);
 
                     setupButtons();
-                    Toast.makeText(ResponderRequestActivity.this, toastMsg, Toast.LENGTH_SHORT);
+                    Toast.makeText(ResponderRequestActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }

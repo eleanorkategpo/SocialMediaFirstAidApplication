@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:background="@drawable/paper_plane_bg"
     tools:context=".RegisterActivity">
 
     <TextView
         android:id="@+id/createAccountTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp"
-        android:text="Create an Account"
-        android:layout_centerHorizontal="true" />
+        android:text="Create an Account"/>
 
     <EditText
         android:id="@+id/nameET"
@@ -23,7 +24,6 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/createAccountTV"
         />
     <LinearLayout
@@ -60,8 +60,7 @@
         android:ems="10"
         android:layout_below="@+id/gender"
         android:hint="Birthday"
-        android:inputType="date"
-        android:layout_centerHorizontal="true"/>
+        android:inputType="date"/>
 
     <EditText
         android:id="@+id/emailET"
@@ -71,8 +70,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:layout_below="@+id/birthdayET"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/birthdayET"/>
 
     <EditText
         android:id="@+id/passwordET"
@@ -82,8 +80,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_below="@+id/emailET"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/emailET"/>
 
     <EditText
         android:id="@+id/phoneNumberEt"
@@ -93,8 +90,7 @@
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="text|phone"
-        android:layout_below="@+id/passwordET"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/passwordET"/>
 
     <CheckBox
         android:id="@+id/isResponderCB"
@@ -102,8 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="Register as Responder"
-        android:layout_below="@+id/phoneNumberEt"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/phoneNumberEt"/>
 
     <TextView
         android:id="@+id/siginTV"
@@ -113,8 +108,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="Already have an account?\nSign In"
-        android:layout_below="@+id/isResponderCB"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/isResponderCB"/>
 
     <Button
         android:id="@+id/loginBT"
@@ -122,9 +116,5 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Register"
-        android:layout_below="@+id/siginTV"
-        android:layout_centerHorizontal="true"/>
-
-
-
-</RelativeLayout>
+        android:layout_below="@+id/siginTV"/>
+</LinearLayout>

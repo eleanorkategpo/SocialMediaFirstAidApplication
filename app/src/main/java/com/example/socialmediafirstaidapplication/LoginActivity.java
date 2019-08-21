@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validate(String email, String password) {
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter all the details", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Please enter all the details", Toast.LENGTH_SHORT).show();
         }
         else {
             progressDialog.setMessage("Logging you in...");

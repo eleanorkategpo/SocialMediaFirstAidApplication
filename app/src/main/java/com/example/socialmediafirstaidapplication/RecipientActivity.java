@@ -74,7 +74,7 @@ public class RecipientActivity extends AppCompatActivity {
 
                 String currentSituation = Situation.getText().toString();
                 if (currentSituation.isEmpty()){
-                    Toast.makeText(RecipientActivity.this, "Kindly explain the situation.", Toast.LENGTH_SHORT);
+                    Toast.makeText(RecipientActivity.this, "Kindly explain the situation.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     requestLocation();

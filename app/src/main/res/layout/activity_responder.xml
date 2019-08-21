@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/paper_plane_bg"
     tools:context=".ResponderActivity">
 
     <TextView
@@ -22,6 +23,7 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
+        android:background="#fff"
         android:layout_marginRight="30dp" />
 
     <TextView
