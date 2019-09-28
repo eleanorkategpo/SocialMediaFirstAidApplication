@@ -22,9 +22,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -48,12 +52,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class RecipientActivity extends AppCompatActivity {
+public class RecipientActivity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener{
     private Button Help;
-    private EditText Situation;
+    private EditText Situation, Others;
+    private Spinner Category;
     private DatabaseReference firstAidRequest;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private String currentCategory;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -73,8 +79,17 @@ public class RecipientActivity extends AppCompatActivity {
                 progressDialog.show();
 
                 String currentSituation = Situation.getText().toString();
-                if (currentSituation.isEmpty()){
-                    Toast.makeText(RecipientActivity.this, "Kindly explain the situation.", Toast.LENGTH_SHORT).show();
+                if (currentSituation.isEmpty() || currentCategory.isEmpty()){
+                    Toast.makeText(RecipientActivity.this, "Kindly explain the situation and select category.", Toast.LENGTH_SHORT).show();
+                }
+                else if (currentCategory.equals("Others")) {
+                    String cat = Others.getText().toString();
+                    if (cat.isEmpty()) {
+                        Toast.makeText(RecipientActivity.this, "Please input category..", Toast.LENGTH_SHORT).show();
+                    } else {
+                        currentCategory = cat;
+                        requestLocation();
+                    }
                 }
                 else {
                     requestLocation();
@@ -133,6 +148,14 @@ public class RecipientActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         Help = (Button) findViewById(R.id.helpBT);
         Situation = (EditText) findViewById(R.id.situationET);
+        Others = (EditText) findViewById(R.id.others);
+
+        Category = (Spinner) findViewById(R.id.changeCategory);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.categories_arrays, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Category.setAdapter(adapter);
+        Category.setOnItemSelectedListener(this);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -186,30 +209,29 @@ public class RecipientActivity extends AppCompatActivity {
                         // String formattedAddress, Sting phoneNumber, String dateRequested, int status
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, situation, "0", longitude, latitude, formattedAddress, phoneNumber, dateFormat.format(new Date()),null,  1);
-                                firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
-                                            progressDialog.dismiss();
+                        FirstAidRequest request = new FirstAidRequest(id, user_id, user_name, currentCategory, situation, "0", longitude, latitude, formattedAddress, phoneNumber, dateFormat.format(new Date()), null, 1);
+                        firstAidRequest.child(id).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(RecipientActivity.this, "Request submitted!", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
 
-                                            Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
-                                            intent.putExtra("REQUEST_ID", id);
-                                            startActivity(intent);
-                                        }
+                                    Intent intent = new Intent(RecipientActivity.this, RecipientSuccessActivity.class);
+                                    intent.putExtra("REQUEST_ID", id);
+                                    startActivity(intent);
+                                }
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(RecipientActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         });
-                    }
-                    else {
-                        Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.",Toast.LENGTH_LONG);
+                    } else {
+                        Toast.makeText(RecipientActivity.this, "Unable to find location. Check gps and try again.", Toast.LENGTH_LONG);
                     }
                 }
             }
@@ -272,5 +294,20 @@ public class RecipientActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return address;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        currentCategory = getResources().getStringArray(R.array.categories_arrays)[i];
+        if (i == 10) {
+            Others.setVisibility(View.VISIBLE);
+        } else {
+            Others.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

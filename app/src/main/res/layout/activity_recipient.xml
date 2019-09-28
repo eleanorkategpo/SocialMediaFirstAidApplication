@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="150dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/paper_plane_bg"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:gravity="center_horizontal|center_vertical"
     tools:context=".RecipientActivity">
 
     <TextView
@@ -17,12 +16,28 @@
         android:text="Recipient"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
+    <Spinner
+        android:id="@+id/changeCategory"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:focusedByDefault="true"
+        android:layout_height="40dp">
+    </Spinner>
+
+    <EditText
+        android:id="@+id/others"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:hint="Category"/>
+
     <EditText
         android:id="@+id/situationET"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="20dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Briefly explain the situation"

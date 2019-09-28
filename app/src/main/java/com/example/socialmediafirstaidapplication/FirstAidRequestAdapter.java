@@ -36,7 +36,7 @@ public class FirstAidRequestAdapter extends RecyclerView.Adapter<FirstAidRequest
         FirstAidRequest request = firstAidRequestList.get(position);
         holder.dateTV.setText(request.getDateRequested());
         holder.requestIdTV.setText("Request ID: " + request.getId());
-        holder.situationTV.setText(((request.getSituation()).isEmpty()) ? "Situation not explained" : request.getSituation() );
+        holder.situationTV.setText(((request.getSituation()).isEmpty()) ? "Situation not explained" : (request.getCategory().isEmpty()) ? "" : (request.getCategory() + ": ")  + request.getSituation() );
         holder.nameTV.setText("Name: " + request.getName());
         holder.currentStatusTV.setText(request.getStatus() == 1 ?  "Submitted" : (request.getStatus() == 2 ? "Accepted" : "Resolved") );
         holder.addressTV.setText("Address: " + request.getFormattedAddress());

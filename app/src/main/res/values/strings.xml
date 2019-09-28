@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">Social Media First Aid Application</string>
     <string name="google_maps_key">AIzaSyDYScD2_2stBNPvIXkxddrn-OrIxIUmdwk</string>
+    <string-array name="categories_arrays">
+        <item>Cut/Scrape</item>
+        <item>Burn</item>
+        <item>Insect Bite/Sting</item>
+        <item>Splinter</item>
+        <item>Sunburn</item>
+        <item>Nosebleed</item>
+        <item>Sprains/Strains/Tears</item>
+        <item>Fracture</item>
+        <item>Dislocations</item>
+        <item>Fracture</item>
+        <item>Others</item>
+    </string-array>
 </resources>
